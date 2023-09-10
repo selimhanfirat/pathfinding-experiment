@@ -1,22 +1,13 @@
 import pygame
 from spot import Spot
-from generate import ROWS, make_grid
+from generate import make_grid
 from algorithm import algorithm
 from dijkstra import dijkstra_algorithm
+from constants import num_goals, obstacle_density, num_goals, width, astar 
 
-# Define the dimensions of the game window
-WIDTH = 800
+rows = 60
 
-# Define which algorithm to use
-ASTAR = True
-
-# Define obstacle obstacle_density percentage
-obstacle_density = 40
-
-# Define the number of goals
-num_goals = 5
-
-WIN = pygame.display.set_mode((WIDTH, WIDTH))
+WIN = pygame.display.set_mode((width, width))
 pygame.display.set_caption("A* Path Finding Algorithm")
 
 # Define color constants
@@ -61,14 +52,14 @@ def get_clicked_pos(pos, rows, width):
 
 
 def main(win, width):
-    grid, source, goals = make_grid(ROWS, width, obstacle_density, num_goals, solvable_check=True)
+    grid, source, goals = make_grid(rows, width, obstacle_density, num_goals, solvable_check=True)
 
     paths = []
     algorithm_running = False
 
     run = True
     while run:
-        draw(win, grid, ROWS, width)
+        draw(win, grid, rows, width)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -77,20 +68,20 @@ def main(win, width):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s and source is None:
                         pos = pygame.mouse.get_pos()
-                        row, col = get_clicked_pos(pos, ROWS, width)
+                        row, col = get_clicked_pos(pos, rows, width)
                         source = grid[row][col]
                         source.make_start()
 
                 if pygame.mouse.get_pressed()[0]:  # LEFT (set barrier)
                     pos = pygame.mouse.get_pos()
-                    row, col = get_clicked_pos(pos, ROWS, width)
+                    row, col = get_clicked_pos(pos, rows, width)
                     spot = grid[row][col]
                     if spot != source and spot not in goals:
                         spot.make_barrier()
 
                 if pygame.mouse.get_pressed()[2]:  # RIGHT (add goal or reset to white)
                     pos = pygame.mouse.get_pos()
-                    row, col = get_clicked_pos(pos, ROWS, width)
+                    row, col = get_clicked_pos(pos, rows, width)
                     spot = grid[row][col]
                     
                     if spot.color == WHITE:
@@ -105,20 +96,20 @@ def main(win, width):
                     if event.key == pygame.K_SPACE and source is not None and goals:
                         algorithm_running = True
                                 
-                        if ASTAR:
+                        if astar:
                             print("A* algorithm is running") 
                             for goal in goals:
-                                paths.append(algorithm(grid, source, goal, draw=lambda: draw(win, grid, ROWS, width)))
+                                paths.append(algorithm(grid, source, goal, draw=lambda: draw(win, grid, rows, width)))
                         else:
                             print("Dijkstra's algorithm is running") 
-                            dict_paths = dijkstra_algorithm(grid, source, goals, draw=lambda: draw(win, grid, ROWS, width))
+                            dict_paths = dijkstra_algorithm(grid, source, goals, draw=lambda: draw(win, grid, rows, width))
                             for goal in goals:
                                 paths.append(dict_paths[goal])
                             
                         for path in paths:
                             for spot in path:
                                 spot.make_path()
-                        draw(win, grid, ROWS, width) 
+                        draw(win, grid, rows, width) 
 
                                 
             if event.type == pygame.KEYDOWN:
@@ -127,14 +118,14 @@ def main(win, width):
                     goals.clear()
                     paths.clear()
                     algorithm_running = False
-                    grid, source, goals = make_grid(ROWS, width, obstacle_density, num_goals)
-                    draw(win, grid, ROWS, width)
+                    grid, source, goals = make_grid(rows, width, obstacle_density, num_goals)
+                    draw(win, grid, rows, width)
 
 
     pygame.quit()
 
 if __name__ == "__main__":
-    main(WIN, WIDTH)
+    main(WIN, width)
 
 
 

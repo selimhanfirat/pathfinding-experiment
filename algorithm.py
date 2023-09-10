@@ -7,6 +7,7 @@ def reconstruct_path(came_from, current):
         current = came_from[current]
         path.append(current)
     return path
+
 count = 0
 
 def h(p1, p2):

@@ -1,15 +1,9 @@
 import random
 import pygame 
 from spot import Spot
-from collections import deque
-from queue import PriorityQueue
-from algorithm import algorithm 
-
-# Define the dimensions of the grid
-ROWS = 80
-COLS = ROWS
-
-from collections import deque
+from algorithm import algorithm
+from dijkstra import dijkstra_algorithm
+from constants import astar
 
 def make_grid(rows, width, obstacle_density, num_goals, solvable_check=False):
     while True:
@@ -56,8 +50,7 @@ def make_grid(rows, width, obstacle_density, num_goals, solvable_check=False):
 
         # Verify solvability
         if solvable_check:
-            print("checking if it is solvable")
-            if is_grid_solvable(grid, source, goals):
+            if is_grid_solvable(grid, source, goals, astar):
                 print("it is solvable")
                 return grid, source, goals
             else:
@@ -66,16 +59,29 @@ def make_grid(rows, width, obstacle_density, num_goals, solvable_check=False):
             return grid, source, goals
 
 
-def is_grid_solvable(grid, source, goals):
+def is_grid_solvable(grid, source, goals, astar):
     for row in grid:
         for spot in row:
             spot.update_neighbors(grid)
-    for goal in goals:
-        if algorithm(grid, source, goal) is None:
-            return False
+    
+    if astar:
+        print("checking with A*")
+        for goal in goals:
+            temp = algorithm(grid, source, goal)
+            print(temp)
+            if temp is None:
+                return False
+    else:
+        print("checking with Dijkstra")
+        # Check if there is a path for each goal
+        paths = dijkstra_algorithm(grid, source, goals)
+        for path in paths.values():
+            if not path:
+                return False
+    
     return True
 
-
+        
 # Example usage:
 if __name__ == "__main__":
     pygame.quit()

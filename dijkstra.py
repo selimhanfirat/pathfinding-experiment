@@ -2,6 +2,10 @@ import pygame
 from queue import PriorityQueue
 
 def dijkstra_algorithm(grid, start, goals, draw=None):
+    for row in grid:
+        for spot in row:
+            spot.update_neighbors(grid)
+            
     # Create a copy of the goals list to avoid modifying the original list
     remaining_goals = goals.copy()
 
@@ -48,6 +52,7 @@ def dijkstra_algorithm(grid, start, goals, draw=None):
         paths[goal] = reconstruct_path(came_from, goal)
 
     return paths
+
 def reconstruct_path(came_from, current):
     path = []
     while current in came_from:

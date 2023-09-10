@@ -1,12 +1,11 @@
 import pickle
 from spot import Spot  # Import your Spot class or adjust the import as needed
-from generate_dataset import grid_size
+from constants import grid_size
 
 def load_grid_from_pickle(pickle_path):
     gap = 10 # gap is used when trying to visualize. In this context 10 represents 800 / 80.
     try:
         with open(pickle_path, 'rb') as file:
-            print("IT OPENS")
             # Load the data from the pickle file
             letter_grid, letter_to_spot, source_pos, goal_positions = pickle.load(file)
 
