@@ -2,19 +2,19 @@
 width = 800
 
 # % of Obstacles present in the grid
-obstacle_density = 30
+obstacle_density = 0
 
 # Number of goals to generate
-num_goals = 1
+num_goals = 7
 
 # Size of the grid
-grid_size = 1000
+grid_size = 512
 
 # The test to generate data for
-test_name = 'obstacle_density'
+test_name = 'num_goals'
 
 # Number of grids to generate for the generate_dataset file
-num_grids = 10
+num_grids = 250
 
 # Which algorithm to use
 astar = True

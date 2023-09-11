@@ -43,7 +43,7 @@ def dijkstra_algorithm(grid, start, goals, draw=None):
         if draw is not None:
             draw()
             
-        if current != start and draw:
+        if current != start and not current.is_end() and draw:
             current.make_closed()
             
     # Reconstruct paths to all goals

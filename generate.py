@@ -68,7 +68,6 @@ def is_grid_solvable(grid, source, goals, astar):
         print("checking with A*")
         for goal in goals:
             temp = algorithm(grid, source, goal)
-            print(temp)
             if temp is None:
                 return False
     else:
