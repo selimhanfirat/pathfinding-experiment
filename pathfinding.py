@@ -5,7 +5,7 @@ from algorithm import algorithm
 from dijkstra import dijkstra_algorithm
 from constants import num_goals, obstacle_density, num_goals, width, astar 
 
-rows = 128
+rows = 60
 
 WIN = pygame.display.set_mode((width, width))
 pygame.display.set_caption("A* Path Finding Algorithm")
@@ -52,9 +52,8 @@ def get_clicked_pos(pos, rows, width):
 
 
 def main(win, width):
-    import util
-    path = "datasets/grid_size/128/128_1.pkl"
-    grid, source, goals = util.load_grid_from_pickle(path)
+
+    grid, source, goals = make_grid(rows, width, obstacle_density, num_goals, solvable_check=True)
     paths = []
     algorithm_running = False
 

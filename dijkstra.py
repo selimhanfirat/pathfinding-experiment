@@ -1,7 +1,7 @@
 import pygame
 from queue import PriorityQueue
 
-def dijkstra_algorithm(grid, start, goals, draw=None):
+def dijkstra_algorithm(grid, start, goals, draw=None, experiment=False):
     for row in grid:
         for spot in row:
             spot.update_neighbors(grid)
@@ -15,6 +15,7 @@ def dijkstra_algorithm(grid, start, goals, draw=None):
     came_from = {}
     g_score = {spot: float("inf") for row in grid for spot in row}
     g_score[start] = 0
+
 
     while not open_set.empty():
         if draw:  # If there is draw it means the UI is running, check for quit event

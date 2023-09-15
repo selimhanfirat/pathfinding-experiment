@@ -8,8 +8,6 @@ def reconstruct_path(came_from, current):
         path.append(current)
     return path
 
-count = 0
-
 def h(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
@@ -22,15 +20,15 @@ def h(p1, p2):
 
     return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
 
-def algorithm(grid, start, end, draw=None, debug=False):
-    
+#from memory_profiler import profile
+#@profile(stream=open('logs/A*/num_goals/10.txt', 'w+'))
+def algorithm(grid, start, end, draw=None, debug=False, experiment=False):
     for row in grid:
         for spot in row:
             spot.update_neighbors(grid)
-    
-    count = 0
+
     open_set = PriorityQueue()
-    open_set.put((0, count, start))
+    open_set.put((0, start))
     came_from = {}
     g_score = {spot: float("inf") for row in grid for spot in row}
     g_score[start] = 0
@@ -42,23 +40,26 @@ def algorithm(grid, start, end, draw=None, debug=False):
     cost_vertical_horizontal = 10
 
     while not open_set.empty():
-        if draw: #if there is draw that means algorithm is called when the game is running 
+        if draw: 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
 
-        current = open_set.get()[2]
+        current = open_set.get()[1]
         open_set_hash.remove(current)
 
         if debug:
             if not current.is_blank():
                 print(current.color)
-          
+                
         if current == end:
             if draw:
                 end.make_end()
-            return reconstruct_path(came_from, end)
-
+            if experiment:
+                return reconstruct_path(came_from, end)
+            else:
+                return reconstruct_path(came_from, end)
+            
         for neighbor in current.neighbors:
             if current.row != neighbor.row and current.col != neighbor.col:
                 temp_g_score = g_score[current] + cost_diagonal
@@ -70,8 +71,7 @@ def algorithm(grid, start, end, draw=None, debug=False):
                 g_score[neighbor] = temp_g_score
                 f_score[neighbor] = temp_g_score + h(neighbor.get_pos(), end.get_pos())
                 if neighbor not in open_set_hash:
-                    count += 1
-                    open_set.put((f_score[neighbor], count, neighbor))
+                    open_set.put((f_score[neighbor], neighbor))
                     open_set_hash.add(neighbor)
                     
         if draw is not None:
@@ -82,4 +82,3 @@ def algorithm(grid, start, end, draw=None, debug=False):
 
     print("No path found")
     return None
-

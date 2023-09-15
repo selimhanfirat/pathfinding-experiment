@@ -1,11 +1,13 @@
 import os
 import pickle
 from generate import make_grid
-from constants import grid_size, num_goals, obstacle_density, num_grids, width, test_name
+from constants import grid_size, num_goals, obstacle_density, num_grids, width
 
 
 # Create the directory structure if it doesn't exist
 datasets_dir = 'datasets'
+
+test_name = "num_goals"
 
 if test_name == 'grid_size':
     independent_var = grid_size    
@@ -27,7 +29,10 @@ letter_to_spot = {
 }
 
 # Generate and save the grids
+count = 0
 for i in range(num_grids):
+    print(f"{num_grids - count} iterations remain")
+    count += 1
     grid, source, goals = make_grid(grid_size, width, obstacle_density, num_goals, solvable_check=True)
     
     # Convert the grid to a letter-based representation
